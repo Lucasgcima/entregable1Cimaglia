@@ -13,6 +13,14 @@ function buscarReserva() {
 
   const resultado = document.getElementById("resultado");
 
+  // Confirmación previa
+  const confirmado = confirm("¿Revisó que los datos estén cargados correctamente?");
+  if (!confirmado) {
+    resultado.textContent = "Búsqueda cancelada por el usuario.";
+    resultado.style.color = "orange";
+    return;
+  }
+
   const reservaEncontrada = reservas.find(reserva =>
     reserva.ciudad === ciudadInput &&
     reserva.fecha === fechaInput &&
@@ -35,18 +43,26 @@ function agregarReserva() {
 
   const mensaje = document.getElementById("mensaje-agregado");
 
-  if (ciudad && fecha && documento) {
-    reservas.push({ ciudad, fecha, documento });
-    mensaje.textContent = "Reserva agregada correctamente.";
-    mensaje.style.color = "green";
-
-    // Limpiar los campos
-    document.getElementById("nuevaCiudad").value = "";
-    document.getElementById("nuevaFecha").value = "";
-    document.getElementById("nuevoDocumento").value = "";
-  } else {
+  if (!ciudad || !fecha || !documento) {
     mensaje.textContent = "Por favor complete todos los campos.";
     mensaje.style.color = "red";
+    return;
   }
-}
 
+  // Confirmación antes de agregar
+  const seguro = confirm("¿Está seguro que desea agregar esta reserva?");
+  if (!seguro) {
+    mensaje.textContent = "Reserva cancelada por el usuario.";
+    mensaje.style.color = "orange";
+    return;
+  }
+
+  reservas.push({ ciudad, fecha, documento });
+  mensaje.textContent = "Reserva agregada correctamente.";
+  mensaje.style.color = "green";
+
+  // Limpiar campos
+  document.getElementById("nuevaCiudad").value = "";
+  document.getElementById("nuevaFecha").value = "";
+  document.getElementById("nuevoDocumento").value = "";
+}
